@@ -1,9 +1,8 @@
 import cv2
 import os
 
-def image_to_video(image_folder, video_path, fps):
-    images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
-    frame = cv2.imread(os.path.join(image_folder, images[0]))
+def images_to_video(images, video_path, fps):
+    frame = images[0]
     height, width, layers = frame.shape
 
     if '.' not in video_path:
@@ -11,10 +10,16 @@ def image_to_video(image_folder, video_path, fps):
     video = cv2.VideoWriter(video_path, 0, fps, (width,height))
 
     for image in images:
-        video.write(cv2.imread(os.path.join(image_folder, image)))
+        video.write(image)
 
     cv2.destroyAllWindows()
     video.release()
+
+def image_folder_to_video(image_folder, video_path, fps):
+    images = [cv2.imread(os.path.join(image_folder, img))
+              for img in os.listdir(image_folder)
+              if img.endswith(".png")]
+    images_to_video(images, video_path, fps)
 
 if __name__ == "__main__":
     import argparse
@@ -25,4 +30,4 @@ if __name__ == "__main__":
     parser.add_argument('--fps', type=int, default=30)
 
     args = parser.parse_args()
-    image_to_video(args.image_folder, args.video_path, args.fps)
+    image_folder_to_video(args.image_folder, args.video_path, args.fps)

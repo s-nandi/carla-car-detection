@@ -2,6 +2,7 @@ import cv2
 import os
 
 def video_to_image(video_path, image_folder):
+    vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
     frame = 0
     while success:
@@ -16,6 +17,9 @@ if __name__ == "__main__":
     
     parser.add_argument('--video_path', required=True, help='Path to the output video')
     parser.add_argument('--image_folder', required=True, help='Location of the image folder')
+
+    args = parser.parse_args()
+
     video_to_image(args.video_path, args.image_folder)
 
     

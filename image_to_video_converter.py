@@ -25,5 +25,4 @@ if __name__ == "__main__":
     parser.add_argument('--fps', type=int, default=30)
 
     args = parser.parse_args()
-    # Name of the directory containing the object detection module we're using
     image_to_video(args.image_folder, args.video_path, args.fps)

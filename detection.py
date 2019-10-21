@@ -11,6 +11,7 @@ import numpy as np
 import tensorflow as tf
 from utils import label_map_util
 from utils import visualization_utils as vis_util
+from image_to_video_converter import images_to_video
 
 class detector:
     def __init__(self, model_path, labelmap_path):
@@ -60,29 +61,30 @@ class detector:
    
         # Open video file
         video = cv2.VideoCapture(video_path)
-        # Output video file
-        out_video_path = PurePath(output_path).with_name(video_name + ".avi")
-        # out_video = cv2.VideoWriter(out_video_path, 0, 30, (640, 320))
-        
-        frame_number = 0
+   
+        frames = []
         while(video.isOpened()):
             ret, frame = video.read()
+            if not ret:
+                break
             # Draw boxes
             frame, boxes = self.draw_boxes_for_image(frame, min_score_threshold)
             # Save frame with boxes
+            frame_number = len(frames)
             frame_path = os.path.join(output_path, f"{video_name}_frame_{frame_number}.png")
             vis_util.save_image_array_as_png(frame, frame_path)
-            # Add frame with boxes to out_video
-            out_video.write(frame)
-            frame_number += 1
+
+            frames.append(frame)
             # Render video frame if needed
             if display_video:
                 cv2.imshow('Object detector', frame)
             if cv2.waitKey(1) == ord('q'):
                 break
+        # Save as video
+        out_video_path = PurePath(output_path).with_name(video_name + ".avi").as_posix()
+        images_to_video(frames, out_video_path, 30)
         # Clean up
         video.release()
-        out_video.release()
         cv2.destroyAllWindows()
 
 def default_detector():
@@ -92,7 +94,7 @@ def default_detector():
 
 def default_inference():
     det = default_detector()
-    det.process_video("./data/SignaledJunctionRightTurn_1.avi", 0.70, "./output/temp/", True)
+    det.process_video("./data/SignaledJunctionRightTurn_1.avi", 0.70, "./output/temp/", False)
     return det
 
 def process_image(name, frame_number, frame, sess, output_path, tensors, category_index, min_score_threshold):

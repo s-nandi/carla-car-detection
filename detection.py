@@ -100,7 +100,7 @@ class detector:
                     frame_path = os.path.join(output_path, f"{video_name}_frame_{frame_number}.png")
                     print("Saving image at", frame_path)
                     vis_util.save_image_array_as_png(frame, frame_path)
-                    frames.append(frame)    
+                frames.append(frame)    
             # Save as video
             if save_images:
                 out_video_path = os.path.join(output_path, f"{video_name}.avi")

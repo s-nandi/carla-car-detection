@@ -8,10 +8,7 @@
 ## Getting the bounding box log file from a video ##
 Run the following from the root directory
 ```
-python detection.py --model_path=/trained_model/detectors \
-                     --video_path=/path/to/video/file \
-                     --min_threshold=0.70 
-                     --output_path=/path/to/output/folder
+python detection.py --model_path=/trained_model/detectors --video_path=/path/to/video/file --min_threshold=0.70 --output_path=/path/to/output/folder
 ```
 
 Threshold determines the level of certainty required for a bounding box to be reported (higher values result in more false positives)
@@ -19,11 +16,7 @@ Threshold determines the level of certainty required for a bounding box to be re
 ## Getting screenshots and videos ##
 Modify the above command as follows
 ```
-python detection.py --model_path=/trained_model/detectors \
-                     --video_path=/path/to/video/file \
-                     --min_threshold=0.70 
-                     --output_path=/path/to/output/folder
-                     --save_images
+python detection.py --model_path=/trained_model/detectors --video_path=/path/to/video/file --min_threshold=0.70 --output_path=/path/to/output/folder --save_images
 ```
 Each frame will be saved as a `.png` file, and the concatenated video will be saved as a `.avi` file
 

@@ -12,7 +12,7 @@ python detection.py --model_path=/trained_model/detectors --video_path=/path/to/
 ```
 
 Threshold determines the level of certainty required for a bounding box to be reported (higher values result in more false positives) \
-To use a different model, you can change `model_path` accordingly (ex. `--model_path=/trained_model/detectors-36910`)
+To use a different model, you can change `model_path` accordingly (ex. `--model_path=/trained_model/detectors-9614`)
 
 ## Getting screenshots and videos ##
 Use the following command (it just adds a `--save_images` argument to the script)

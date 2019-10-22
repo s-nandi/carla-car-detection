@@ -1,5 +1,3 @@
-# Based on https://github.com/EdjeElectronics/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10/blob/master/Object_detection_image.py
-
 import sys
 from pathlib import Path, PurePath
 sys.path.append("./models/research/object_detection/")
@@ -14,7 +12,9 @@ from utils import visualization_utils as vis_util
 from image_to_video_converter import images_to_video
 
 class detector:
-    def __init__(self, model_path, labelmap_path):
+    def __init__(self, model_directory):
+        model_path = os.path.join(model_directory, 'frozen_inference_graph.pb')
+        labelmap_path = os.path.join(model_directory, 'labelmap.pbtxt')
         self.num_classes = 5
         self.label_map = label_map_util.load_labelmap(labelmap_path)
         self.categories = label_map_util.convert_label_map_to_categories(self.label_map,
@@ -55,41 +55,63 @@ class detector:
                       for box, score in zip(np.squeeze(boxes), np.squeeze(scores))
                       if score >= min_score_threshold]
         return frame, good_boxes
-            
-    def process_video(self, video_path, min_score_threshold, output_path, display_video):
+
+    @staticmethod
+    def denormalize(box, width, height):
+        # Order taken from: https://www.tensorflow.org/api_docs/python/tf/image/draw_bounding_boxes
+        y_min, x_min, y_max, x_max = box[0], box[1], box[2], box[3]
+        x_min *= width
+        x_max *= width
+        y_min *= height
+        y_max *= height
+        return [x_min, x_max, y_min, y_max]
+
+    @staticmethod
+    def log_boxes(frame_number, boxes, ofile, width, height):
+        for box in boxes:
+            box = detector.denormalize(box, width, height)
+            # Cast float coordinates to integers
+            box = map(int, box)
+            box = [frame_number] + list(box)
+            line = "|".join(map(str, box))
+            print(line, file=ofile)
+    
+    def process_video(self, video_path, min_score_threshold, output_path, save_images):
         video_name = Path(video_path).stem
-   
         # Open video file
         video = cv2.VideoCapture(video_path)
-   
-        frames = []
-        while(video.isOpened()):
-            ret, frame = video.read()
-            if not ret:
-                break
-            # Draw boxes
-            frame, boxes = self.draw_boxes_for_image(frame, min_score_threshold)
-            # Save frame with boxes
-            frame_number = len(frames)
-            frame_path = os.path.join(output_path, f"{video_name}_frame_{frame_number}.png")
-            vis_util.save_image_array_as_png(frame, frame_path)
-
-            frames.append(frame)
-            # Render video frame if needed
-            if display_video:
-                cv2.imshow('Object detector', frame)
-            if cv2.waitKey(1) == ord('q'):
-                break
-        # Save as video
-        out_video_path = PurePath(output_path).with_name(video_name + ".avi").as_posix()
-        images_to_video(frames, out_video_path, 30)
+        # Set up logging file
+        log_name = os.path.join(output_path, f"{video_name}_log.txt")
+        with open(log_name, 'a') as log_file:
+            frames = []
+            while(video.isOpened()):
+                ret, frame = video.read()
+                if not ret:
+                    break
+                frame_number = len(frames)
+                print("At Frame:", frame_number)
+                # Draw boxes
+                frame, boxes = self.draw_boxes_for_image(frame, min_score_threshold)
+                height, width, layers = frame.shape
+                # Log boxes
+                detector.log_boxes(frame_number, boxes, log_file, width, height)
+                # Save frame with boxes
+                if save_images:
+                    frame_path = os.path.join(output_path, f"{video_name}_frame_{frame_number}.png")
+                    print("Saving image at", frame_path)
+                    vis_util.save_image_array_as_png(frame, frame_path)
+                    frames.append(frame)    
+            # Save as video
+            if save_images:
+                out_video_path = os.path.join(output_path, f"{video_name}.avi")
+                print("Saving video at", out_video_path)
+                images_to_video(frames, out_video_path, 30)
         # Clean up
         video.release()
         cv2.destroyAllWindows()
 
 def default_detector():
-    det = detector("./trained_model/detectors/frozen_inference_graph.pb",
-                   "./trained_model/detectors/labelmap.pbtxt")
+    det = detector("./trained_model/detectors/")
     return det
 
 def default_inference():
@@ -97,103 +119,17 @@ def default_inference():
     det.process_video("./data/SignaledJunctionRightTurn_1.avi", 0.70, "./output/temp/", False)
     return det
 
-def process_image(name, frame_number, frame, sess, output_path, tensors, category_index, min_score_threshold):
-    image_tensor, detection_boxes, detection_scores, detection_classes, num_detections = tensors
-    
-    frame_expanded = np.expand_dims(frame, axis=0)   
-    (boxes, scores, classes, num) = sess.run(
-        [detection_boxes, detection_scores, detection_classes, num_detections],
-        feed_dict={image_tensor: frame_expanded})
-    vis_util.visualize_boxes_and_labels_on_image_array(
-        frame,
-        np.squeeze(boxes),
-        np.squeeze(classes).astype(np.int32),
-        np.squeeze(scores),
-        category_index,
-        use_normalized_coordinates=True,
-        line_thickness=2,
-        min_score_thresh=min_score_threshold)
-    output_file = os.path.join(output_path, f"{name}_frame_{frame_number}.png")
-    vis_util.save_image_array_as_png(frame, output_file)
-    return frame
-    
-
-def process_video(model_path, labelmap_path, video_path, min_score_threshold, output_path, display_video):
-    num_classes = 5
-    video_name = Path(video_path).stem
-    
-    label_map = label_map_util.load_labelmap(labelmap_path)
-    categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=num_classes, use_display_name=True)
-    category_index = label_map_util.create_category_index(categories)
-    
-    detection_graph = tf.Graph()
-    with detection_graph.as_default():
-        od_graph_def = tf.GraphDef()
-        with tf.gfile.GFile(model_path, 'rb') as fid:
-            serialized_graph = fid.read()
-            od_graph_def.ParseFromString(serialized_graph)
-        tf.import_graph_def(od_graph_def, name='')
-        
-        sess = tf.Session(graph=detection_graph)
-        
-        # Define input and output tensors (i.e. data) for the object detection classifier
-        image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-        detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-        detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
-        detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
-        num_detections = detection_graph.get_tensor_by_name('num_detections:0')
-        tensors = (image_tensor, detection_boxes, detection_scores, detection_classes, num_detections)
-        
-        # Open video file
-        video = cv2.VideoCapture(video_path)
-
-        frame_number = 0
-        while(video.isOpened()):
-            ret, frame = video.read()
-            frame_expanded = np.expand_dims(frame, axis=0)
-            process_image(video_name, frame_number, frame, sess, output_path, tensors, category_index, min_score_threshold)
-            
-            (boxes, scores, classes, num) = sess.run(
-                [detection_boxes, detection_scores, detection_classes, num_detections],
-                feed_dict={image_tensor: frame_expanded})
-
-            height, width, channels = frame.shape
-            
-            vis_util.visualize_boxes_and_labels_on_image_array(
-                frame,
-                np.squeeze(boxes),
-                np.squeeze(classes).astype(np.int32),
-                np.squeeze(scores),
-                category_index,
-                use_normalized_coordinates=True,
-                line_thickness=2,
-                min_score_thresh=min_score_threshold)
-
-            frame_number += 1
-            if display_video:
-                cv2.imshow('Object detector', frame)
-                if cv2.waitKey(1) == ord('q'):
-                    break
-
-        # Clean up
-        video.release()
-        cv2.destroyAllWindows()
-
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', help='Path to the frozen inference graph file', required=True)
-    parser.add_argument('--label_path', help='Path to the labelmap file', required=True)
+    parser.add_argument('--model_path', help='Path to the frozen inference graph and labelmap files',
+                        required=True)
     parser.add_argument('--video_path', help='Path to the video', required=True)
-    parser.add_argument('--min_threshold', type=int, help='Minimum score threshold for a bounding box to be drawn', default=0.7)
+    parser.add_argument('--min_threshold', type=float, help='Minimum score threshold for a bounding box to be drawn', default=0.7)
     parser.add_argument('--output_path', help='Path for storing output images and/or logs', required=True)
-    parser.add_argument('--display_video', default=False)
+    parser.add_argument('--save_images', action='store_true')
 
     args = parser.parse_args()
-    # Name of the directory containing the object detection module we're using
-    process_video(args.model_path,
-                  args.label_path,
-                  args.video_path,
-                  args.min_threshold,
-                  args.output_path,
-                  args.display_video)
+
+    det = detector(args.model_path)
+    det.process_video(args.video_path, args.min_threshold, args.output_path, args.save_images)

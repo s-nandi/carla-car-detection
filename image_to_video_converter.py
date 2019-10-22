@@ -2,18 +2,19 @@ import cv2
 import os
 
 def images_to_video(images, video_path, fps):
-    frame = images[0]
-    height, width, layers = frame.shape
+    if images:
+        frame = images[0]
+        height, width, layers = frame.shape
 
-    if '.' not in video_path:
-        video_path += '.avi'
-    video = cv2.VideoWriter(video_path, 0, fps, (width,height))
-
-    for image in images:
-        video.write(image)
-
-    cv2.destroyAllWindows()
-    video.release()
+        if '.' not in video_path:
+            video_path += '.avi'
+            
+        video = cv2.VideoWriter(video_path, 0, fps, (width,height))
+        for image in images:
+            video.write(image)
+            
+        cv2.destroyAllWindows()
+        video.release()
 
 def image_folder_to_video(image_folder, video_path, fps):
     images = [cv2.imread(os.path.join(image_folder, img))

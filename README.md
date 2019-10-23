@@ -1,7 +1,7 @@
 # carla-car-detection
 
 ## Dependencies ##
-* pip install opencv-python absl-py matplotlib numpy
+* pip install opencv-python absl-py matplotlib numpy pillow
 * pip install tensorflow-gpu==1.14
 (this might be incomplete)
 

@@ -1,0 +1,11 @@
+Logging Metrics:
+Losses/Loss/BoxClassifierLoss/classification_loss : 0.03266865760087967
+Losses/Loss/BoxClassifierLoss/localization_loss : 0.026765573769807816
+Losses/Loss/RPNLoss/localization_loss : 0.1704057902097702
+Losses/Loss/RPNLoss/objectness_loss : 0.14298318326473236
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/bike : 0.31174565468450394
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/motobike : 0.17949124378294037
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_light : 0.10394176346281618
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_sign : 0.004079149206022744
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/vehicle : 0.7934272012539971
+PascalBoxes_Precision/mAP@0.5IOU : 0.2785370024780561

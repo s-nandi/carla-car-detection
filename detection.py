@@ -51,9 +51,18 @@ class detector:
             use_normalized_coordinates=True,
             line_thickness=2,
             min_score_thresh=min_score_threshold)
+        
+        """
+        print("Self cateogry index")
+        print(self.category_index)
+        print("Score/Classes")
+        for box, score, cls in zip(np.squeeze(boxes), np.squeeze(scores),np.squeeze(classes).astype(np.int32)):
+            print(score, cls, self.category_index[cls])
+        """
+            
         good_boxes = [box
-                      for box, score in zip(np.squeeze(boxes), np.squeeze(scores))
-                      if score >= min_score_threshold]
+                      for box, score, cls in zip(np.squeeze(boxes), np.squeeze(scores), np.squeeze(classes).astype(np.int32))
+                      if score >= min_score_threshold and 'traffic' not in self.category_index[cls]['name']]
         return frame, good_boxes
 
     @staticmethod

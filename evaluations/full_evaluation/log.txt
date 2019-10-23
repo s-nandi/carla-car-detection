@@ -1,11 +1,55 @@
 Logging Metrics:
-Losses/Loss/BoxClassifierLoss/classification_loss : 0.03266865760087967
-Losses/Loss/BoxClassifierLoss/localization_loss : 0.026765573769807816
-Losses/Loss/RPNLoss/localization_loss : 0.1704057902097702
-Losses/Loss/RPNLoss/objectness_loss : 0.14298318326473236
-PascalBoxes_PerformanceByCategory/AP@0.5IOU/bike : 0.31174565468450394
-PascalBoxes_PerformanceByCategory/AP@0.5IOU/motobike : 0.17949124378294037
-PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_light : 0.10394176346281618
-PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_sign : 0.004079149206022744
-PascalBoxes_PerformanceByCategory/AP@0.5IOU/vehicle : 0.7934272012539971
-PascalBoxes_Precision/mAP@0.5IOU : 0.2785370024780561
+Losses/Loss/BoxClassifierLoss/classification_loss : 2.793187141418457
+Losses/Loss/BoxClassifierLoss/localization_loss : 0.025600560009479523
+Losses/Loss/RPNLoss/localization_loss : 0.5350727438926697
+Losses/Loss/RPNLoss/objectness_loss : 0.6931289434432983
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/bike : 0.0007197370840650048
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/motobike : 0.0001302375485146057
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_light : 4.232091901561901e-05
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_sign : 0.0
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/vehicle : 0.0011030665706551587
+PascalBoxes_Precision/mAP@0.5IOU : 0.00039907242445007767
+Logging Metrics:
+Losses/Loss/BoxClassifierLoss/classification_loss : 0.04488188028335571
+Losses/Loss/BoxClassifierLoss/localization_loss : 0.031348854303359985
+Losses/Loss/RPNLoss/localization_loss : 0.13426966965198517
+Losses/Loss/RPNLoss/objectness_loss : 0.11898750811815262
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/bike : 0.45779761536669117
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/motobike : 0.39582629878544984
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_light : 0.30891071375269274
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_sign : 0.05189743021919887
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/vehicle : 0.8916209846797203
+PascalBoxes_Precision/mAP@0.5IOU : 0.42121060856075054
+Logging Metrics:
+Losses/Loss/BoxClassifierLoss/classification_loss : 0.059576764702796936
+Losses/Loss/BoxClassifierLoss/localization_loss : 0.04482954740524292
+Losses/Loss/RPNLoss/localization_loss : 0.08611389249563217
+Losses/Loss/RPNLoss/objectness_loss : 0.09484123438596725
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/bike : 0.8875365839104774
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/motobike : 0.950351345083488
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_light : 0.7722106057436633
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_sign : 0.3071276438062633
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/vehicle : 0.9668106117055695
+PascalBoxes_Precision/mAP@0.5IOU : 0.7768073580498922
+Logging Metrics:
+Losses/Loss/BoxClassifierLoss/classification_loss : 0.0705881416797638
+Losses/Loss/BoxClassifierLoss/localization_loss : 0.048652686178684235
+Losses/Loss/RPNLoss/localization_loss : 0.07003553211688995
+Losses/Loss/RPNLoss/objectness_loss : 0.09055090695619583
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/bike : 0.882041782758056
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/motobike : 0.9827777777777778
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_light : 0.8356424729497383
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_sign : 0.5763753199387367
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/vehicle : 0.9674034134325034
+PascalBoxes_Precision/mAP@0.5IOU : 0.8488481533713624
+Logging Metrics:
+Losses/Loss/BoxClassifierLoss/classification_loss : 0.06203760951757431
+Losses/Loss/BoxClassifierLoss/localization_loss : 0.052365366369485855
+Losses/Loss/RPNLoss/localization_loss : 0.06436731666326523
+Losses/Loss/RPNLoss/objectness_loss : 0.09367116540670395
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/bike : 0.9017648240443465
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/motobike : 0.9638895383576234
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_light : 0.8847069762933124
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/traffic_sign : 0.6407758435418007
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/vehicle : 0.9628557802538283
+PascalBoxes_Precision/mAP@0.5IOU : 0.8707985924981824

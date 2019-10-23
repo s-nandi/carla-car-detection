@@ -28,5 +28,25 @@ python image_to_video_converter.py --image_folder=/path/to/image/folder --video_
 ```
 Then use the outputted video for either of the previous two object detection scripts
 
+## Evaluation Results ##
+The log file storing the mAP scores (and some other metrics) is located at: [Evaluation Metrics](evaluations/full_evaluation/log.txt)
+
+For a cleaner representation, consider exporting the `csv` from tensorboard as described below.
+
+## Evaluation Visualizations ##
+If you can use tensorboard on your machine, use the following from the root directory:
+```
+tensorboard --logdir evaluations/full_evaluation
+```
+You can scroll to the bottom of the rendered page and either save the mAP plot image as a `.svg` or export the mAP values as a `.csv`
+
+You can turn smoothing to 0 to get an exact plot
+
+## Training Visualization ##
+Similarly to visualizing the mAP metric, you can use the following from the root directory to visualize training loss metrics:
+```
+tensorboard --logdir full_trained_model/checkpoints
+```
+
 ## Example Output ##
 [![Right Turn](https://img.youtube.com/vi/yQ0sntd1y8k/0.jpg)](https://www.youtube.com/watch?v=yQ0sntd1y8k)

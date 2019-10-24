@@ -8,18 +8,22 @@
 ## Getting the bounding box log file from a video ##
 Run the following from the root directory
 ```
-python detection.py --model_path=/full_trained_model/detectors-iteration# --video_path=/path/to/video/file --min_threshold=0.70 --output_path=/path/to/output/folder
+python detection.py --model_path=full_trained_model/detectors-iteration# --video_path=/path/to/video/file --min_threshold=0.70 --output_path=/path/to/output/folder
 ```
 
 Threshold determines the level of certainty required for a bounding box to be reported (higher values result in more false positives) \
 To use a different model, you can change `model_path` accordingly (ex. `--model_path=/trained_model/detectors-9614`)
 
+## Getting the bounding box log file from a folder of images ##
+Run the following from the root directory
+```
+python image_detection.py --model_path=full_trained_model/detectors-iteration# --images_path=/path/to/images/folder --min_threshold=0.70 --output_path=/path/to/output/folder
+```
+
+Threshold and `model_path` are the same parameters as described above
+
 ## Getting screenshots and videos ##
-Use the following command (it just adds a `--save_images` argument to the script)
-```
-python detection.py --model_path=/full_trained_model/detectors-iteration# --video_path=/path/to/video/file --min_threshold=0.70 --output_path=/path/to/output/folder --save_images
-```
-Each frame will be saved as a `.png` file, and the concatenated video will be saved as a `.avi` file
+Add a `--save_images` argument to either of the prior scripts to output the frames (`.png`) and a video concatenating the frames (`.avi`)
 
 ## Converting a folder of images to a video ##
 If object detection is needed for a set of images in a folder, first use 

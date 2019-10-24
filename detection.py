@@ -90,6 +90,7 @@ class detector:
                       min_score_threshold, output_path, save_images):
         image = cv2.imread(image_path)
         image_name = Path(image_path).stem
+        result_frame = None
         # Set up logging file
         log_name = os.path.join(output_path, f"{video_name}_log.txt")
         with open(log_name, 'a') as log_file:
@@ -100,21 +101,30 @@ class detector:
             height, width, layers = frame.shape
             # Log boxes
             detector.log_boxes(frame_number, boxes, log_file, width, height)
+            # Save frame with boxes for output
+            result_frame = frame
             # Save frame with boxes
             if save_images:
                 frame_path = os.path.join(output_path, f"{video_name}_frame_{image_name}.png")
                 print("Saving image at", frame_path)
                 vis_util.save_image_array_as_png(frame, frame_path)
+        return result_frame
 
     def process_image_folder(self, folder_path, min_score_threshold, output_path, save_images):
         folder_name = Path(folder_path).stem
-        frame_number = 0;
+        frames = []
         for f in os.listdir(folder_path):
             image_path = os.path.join(folder_path, f)
             if os.path.isfile(image_path):
-                self.process_image(folder_name, frame_number, image_path,
-                                   min_score_threshold, output_path, save_images)
-                frame_number += 1
+                frame_number = len(frames)
+                next_frame = self.process_image(folder_name, frame_number, image_path,
+                                                min_score_threshold, output_path, save_images)
+                frames.append(next_frame)
+        if save_images:
+            video_path = os.path.join(output_path, folder_name)
+            video = cv2.VideoCapture(video_path)
+            print("Saving video at", video_path)
+            images_to_video(frames, video_path, 30)
                 
     def process_video(self, video_path, min_score_threshold, output_path, save_images):
         video_name = Path(video_path).stem

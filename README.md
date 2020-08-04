@@ -2,12 +2,16 @@
 
 Given an input video, you can use this to output a log file of bounding boxes around traffic signs/lights, cars, bicycles, and motorcycles. Each line of the log file is in the format: 
 
+```
 frame # | x_min | x_max | y_min | y_max
+```
 
 You can also use a folder of images as input, in case there are issues with converting the list of images into a video.
 
 ## Dependencies ##
-Python 3 is required
+Python 3 is required; the repository has been tested with Python 3.6 running on Ubuntu 16.04 and 18.04.
+
+Some of the files in this repository are stored using [Git Large File Storage](https://git-lfs.github.com/).  It is easiest to set up Git LFS before cloning this repository.  Otherwise, use `git lfs pull` after cloning and initializing Git LFS to ensure you have the full trained models.
 
 If using pip to manage dependencies:
 * pip install opencv-python absl-py matplotlib numpy pillow
@@ -19,8 +23,10 @@ Run the following from the root directory
 python detection.py --model_path=full_trained_model/detectors-40264 --video_path=/path/to/video/file --min_threshold=0.70 --output_path=/path/to/output/folder
 ```
 
-Threshold determines the level of certainty required for a bounding box to be reported (higher values result in more false positives) \
-To use a different model, you can change `model_path` accordingly (ex. `--model_path=/trained_model/detectors-9614`)
+Threshold determines the level of certainty required for a bounding box to be reported (higher values result in more false positives). \
+To use a different model, you can change `model_path` accordingly (ex. `--model_path=/trained_model/detectors-9614`).
+
+The detection log is saved as `{video_name}_log.txt` (ex. `scenario1_log.txt` for `scenario1.avi`).
 
 ## Getting the bounding box log file from a folder of images ##
 Run the following from the root directory
@@ -28,7 +34,9 @@ Run the following from the root directory
 python image_detection.py --model_path=full_trained_model/detectors-40264 --images_path=/path/to/images/folder --min_threshold=0.70 --output_path=/path/to/output/folder
 ```
 
-Threshold and `model_path` are the same parameters as described above
+Threshold and `model_path` are the same parameters as described above.
+
+The detection log is saved as `{folder_name}_log.txt` (ex. `rgb_log.txt` for `scenario1/rgb/`).
 
 ## Getting screenshots and videos ##
 Add a `--save_images` argument to either of the prior scripts to output the frames (`.png`) and a video concatenating the frames (`.avi`). If running the script on a folder of images, the frames will be concatenated in the same order as the sorted file names.

@@ -113,7 +113,9 @@ class detector:
     def process_image_folder(self, folder_path, min_score_threshold, output_path, save_images):
         folder_name = Path(folder_path).stem
         frames = []
-        for f in os.listdir(folder_path):
+        file_names = os.listdir(folder_path)
+        file_names.sort()
+        for f in file_names:
             image_path = os.path.join(folder_path, f)
             if os.path.isfile(image_path):
                 frame_number = len(frames)
